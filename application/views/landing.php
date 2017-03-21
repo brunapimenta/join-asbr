@@ -51,7 +51,7 @@
 
                   <div class="col-lg-6">
                     <label>Telefone</label>
-                    <input class="form-control" type="text" name="telefone" required="required">
+                    <input class="form-control" type="number" name="telefone" required="required">
                   </div>
                 </div>
 
