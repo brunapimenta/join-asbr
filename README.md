@@ -87,3 +87,17 @@ Uma vez obtido, o token não sofrerá alteração (mas poderá ser consultado no
 É só mandar um e-mail para <vagas-ti@actualsales.com.br>.
 
 Obrigado e boa sorte!
+
+# Resolução
+## Ferramentas
+
+**Back-end**
+Para back-end optei por usar *Codeigniter*, pois tenho mais familiaridade com o framework, o que me permitiu mais dinamicidade.
+
+**Front-end**
+* Semantic UI: escolhi substituir Bootstrap pelo Semantic UI para deixa-lo mais fluído e divertido (ambos funcionam em conjunto, contudo para não deixar requisição acumulando, optei por remover a referência do Bootstrap do cabeçalho HTML);
+* Semantic UI Calendar Plugin: decidi usar um plugin para calendário uma vez que não são todos os navegadores que suportam o tipo _date_ do HTML5, facilitando também na validação das datas selecionadas;
+* jMask Plugin: para a formatação do telefone e delimitação dos caracteres do nome, preferi usar um plugin de máscara;
+* Ajax: priorizei a utilização do Ajax também por ter mais familiaridade com o seu funcionamento.
+
+_Bruna Pimenta_ :squirrel:

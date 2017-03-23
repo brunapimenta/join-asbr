@@ -22,6 +22,7 @@ class Landing extends CI_Controller {
                 throw new Exception($this->form_validation->error_string(), 400);
             }
 
+            $this->load->model('Visitante', 'objVisitanteModel', true);
             $this->objVisitanteModel->setNome($this->input->post('nome'));
             $this->objVisitanteModel->setDataNascimento($this->input->post('dataNascimento'));
             $this->objVisitanteModel->setEmail($this->input->post('email'));
@@ -33,8 +34,15 @@ class Landing extends CI_Controller {
 
             echo json_encode(
                 array(
-                    'visitante' => $this->objVisitanteModel->getIdVisitante(),
-                    'pontuacao' => $this->objVisitanteModel->getPontuacao()
+                    'idVisitante' => $this->objVisitanteModel->getIdVisitante(),
+                    'nome' => $this->objVisitanteModel->getNome(),
+                    'email' => $this->objVisitanteModel->getEmail(),
+                    'telefone' => $this->objVisitanteModel->getTelefone(),
+                    'regiao' => $this->objVisitanteModel->getRegiao(),
+                    'unidade' => $this->objVisitanteModel->getUnidade(),
+                    'dataNascimento' => $this->objVisitanteModel->getDataNascimento(),
+                    'score' => $this->objVisitanteModel->getPontuacao(),
+                    'token' => $this->objVisitanteModel->getToken()
                 )
             );
             http_response_code(200);
@@ -47,13 +55,14 @@ class Landing extends CI_Controller {
     public function lead()
     {
         try {
-            $this->form_validation->set_rules('visitante', 'Contato', array('trim', 'required'));
+            $this->form_validation->set_rules('idVisitante', 'Contato', array('trim', 'required'));
 
             if ($this->form_validation->run() == false) {
                 throw new Exception($this->form_validation->error_string(), 400);
             }
 
-            $this->objLeadModel->setIdVisitante($this->input->post('visitante'));
+            $this->load->model('Lead', 'objLeadModel', true);
+            $this->objLeadModel->setIdVisitante($this->input->post('idVisitante'));
             $this->objLeadModel->setPontuacao($this->input->post('pontuacao'));
             $this->objLeadModel->setEnviado($this->input->post('enviado'));
 

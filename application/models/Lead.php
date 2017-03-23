@@ -13,7 +13,10 @@ class Lead extends CI_Model {
 
     public function inserir()
     {
-        $this->db->insert('lead', $this);
+        $this->db->set('id_visitante', $this->idVisitante);
+        $this->db->set('pontuacao', $this->pontuacao);
+        $this->db->set('enviado', $this->enviado);
+        $this->db->insert('leads');
         $this->idLead = $this->db->insert_id();
     }
 
@@ -30,6 +33,11 @@ class Lead extends CI_Model {
     public function setEnviado($enviado)
     {
         $this->enviado = trim($enviado);
+    }
+
+    public function getIdLead()
+    {
+        return $this->idLead;
     }
 
 }

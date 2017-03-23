@@ -11,8 +11,8 @@ class Visitante extends CI_Model {
     private $token = '7c40a1ae1375fee874795382aa70b246';
 
     private $pontuacao = 10;
-    const HOJE = '2016-11-01';
-    const REGIOES = array(
+    private $hoje = '2016-11-01';
+    private $regioes = array(
         'Sul' => 2,
         'Sudeste' => 1,
         'Centro-Oeste' => 3,
@@ -27,7 +27,7 @@ class Visitante extends CI_Model {
 
     public function manter()
     {
-        if ($this->existente()) {
+        if ($this->idVisitante != '' || $this->existente()) {
             $this->alterar();
         } else {
             $this->inserir();
@@ -50,9 +50,15 @@ class Visitante extends CI_Model {
             $this->db->where('id_visitante !=', $this->idVisitante);
         }
 
-        $quantidade = (int) $this->db->count_all_results();
+        $consulta = $this->db->get();
+        $visitante = $consulta->row();
+        $existe = isset($visitante);
 
-        return ($quantidade > 0);
+        if ($existe) {
+            $this->idVisitante = $visitante->id_visitante;
+        }
+
+        return $existe;
     }
 
     private function inserir()
@@ -62,7 +68,14 @@ class Visitante extends CI_Model {
             throw new Exception("Ocorreu um erro ao salvar as informa&ccedil;&otilde;es", 400);
         }
 
-        $this->db->insert('visitantes', $this);
+        $this->db->set('nome', $this->nome);
+        $this->db->set('data_nascimento', $this->dataNascimento);
+        $this->db->set('email', $this->email);
+        $this->db->set('telefone', $this->telefone);
+        $this->db->set('regiao', $this->regiao);
+        $this->db->set('unidade', $this->unidade);
+        $this->db->set('token', $this->token);
+        $this->db->insert('visitantes');
         $this->idVisitante = $this->db->insert_id();
     }
 
@@ -79,6 +92,7 @@ class Visitante extends CI_Model {
         $this->db->set('telefone', $this->telefone);
         $this->db->set('regiao', $this->regiao);
         $this->db->set('unidade', $this->unidade);
+        $this->db->set('token', $this->token);
         $this->db->where('id_visitante', $this->idVisitante);
         $this->db->update('visitantes');
     }
@@ -92,18 +106,18 @@ class Visitante extends CI_Model {
     private function calcularRegiao()
     {
         if ($this->unidade !== 'São Paulo') {
-            $this->pontuacao = $this->pontuacao - (int) REGIAO[$this->regiao];
+            $this->pontuacao = $this->pontuacao - (int) $this->regioes[$this->regiao];
         }
     }
 
     private function calcularIdade()
     {
-        $hoje = new DateTime(HOJE);
+        $hoje = new DateTime($this->hoje);
         $nascimento = new DateTime($this->dataNascimento);
         $idade = $hoje->diff($nascimento);
-        $idade = $idade->format('y');
+        $idade = $idade->format('%y');
 
-        if ($idade > 100 || $idade < 18) {
+        if ($idade > 99 || $idade < 18) {
             $this->pontuacao -= 5;
         }
 
@@ -148,9 +162,44 @@ class Visitante extends CI_Model {
         return $this->idVisitante;
     }
 
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function getTelefone()
+    {
+        return $this->telefone;
+    }
+
+    public function getRegiao()
+    {
+        return $this->regiao;
+    }
+
+    public function getUnidade()
+    {
+        return $this->unidade;
+    }
+
+
+    public function getDataNascimento()
+    {
+        return $this->dataNascimento;
+    }
+
     public function getPontuacao()
     {
         return $this->pontuacao;
     }
 
+    public function getToken()
+    {
+        return $this->token;
+    }
 }
